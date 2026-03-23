@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>❥(^_-)祝彭洁生日快乐❤️</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ffe4f0, #fff0f8, #ffd6e8);
+      font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 60px;
+      transition: background 1s ease;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body.final-bg {
+      background-image: url('http://www.2bbj.cn/uploads/10001/20230519/36f2591511a35d3b3d59a618af31a83c.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    body.final-bg::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 200, 220, 0.55);
+      z-index: 0;
+    }
+
+    .content-wrap {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    /* ===== 音乐按钮 ===== */
+    #music-btn {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      font-size: 26px;
+      cursor: pointer;
+      z-index: 999;
+      animation: rotate 3s linear infinite;
+      user-select: none;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    }
+    #music-btn.paused {
+      animation-play-state: paused;
+      opacity: 0.5;
+    }
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* ===== 第一行标题 ===== */
+    .title {
+      font-size: 26px;
+      font-weight: bold;
+      color: #d63384;
+      text-align: center;
+      margin-bottom: 28px;
+      text-shadow: 0 2px 8px rgba(214,51,132,0.2);
+      animation: fadeInDown 0.8s ease;
+    }
+
+    /* ===== 主图片 ===== */
+    .main-img {
+      width: 220px;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #ff85b3;
+      box-shadow: 0 8px 32px rgba(214,51,132,0.25);
+      margin-bottom: 28px;
+      animation: fadeIn 1s ease;
+    }
+
+    /* ===== 第三行 ===== */
+    .subtitle {
+      font-size: 17px;
+      color: #c2185b;
+      text-align: center;
+      line-height: 1.8;
+      margin-bottom: 36px;
+      padding: 0 10px;
+      animation: fadeIn 1.2s ease;
+    }
+
+    /* ===== No 文字行 ===== */
+    .no-line {
+      font-size: 16px;
+      color: #e91e8c;
+      text-align: center;
+      margin-bottom: 14px;
+      padding: 8px 18px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 20px;
+      box-shadow: 0 2px 10px rgba(214,51,132,0.1);
+      animation: bounceIn 0.5s ease;
+      display: none;
+    }
+    .no-line.show { display: block; }
+
+    /* ===== 按钮区 ===== */
+    .btn-wrap {
+      display: flex;
+      gap: 32px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    .btn {
+      padding: 12px 36px;
+      border-radius: 30px;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    .btn:active { transform: scale(0.95); }
+    .btn-yes {
+      background: linear-gradient(135deg, #ff6eb4, #ff3d7f);
+      color: #fff;
+    }
+    .btn-yes:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(255,61,127,0.4); }
+    .btn-no {
+      background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
+      color: #555;
+    }
+    .btn-no:hover { transform: scale(1.05); }
+
+    /* ===== 弹窗遮罩 ===== */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .popup-overlay.show { display: flex; }
+
+    .popup-box {
+      background: #fff;
+      border-radius: 24px;
+      padding: 30px 24px;
+      text-align: center;
+      max-width: 320px;
+      width: 88%;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+      position: relative;
+      animation: popIn 0.4s ease;
+    }
+    .popup-box img {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 16px;
+      margin-bottom: 14px;
+    }
+    .popup-box p {
+      font-size: 17px;
+      color: #c2185b;
+      font-weight: bold;
+    }
+    .popup-close {
+      position: absolute;
+      top: 10px; right: 14px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    /* ===== 最终页面 ===== */
+    #final-page {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-top: 10px;
+      width: 100%;
+    }
+    #final-page.show { display: flex; }
+
+    .final-line {
+      font-size: 18px;
+      color: #fff;
+      text-align: center;
+      padding: 10px 24px;
+      background: rgba(214,51,132,0.65);
+      border-radius: 20px;
+      box-shadow: 0 4px 16px rgba(214,51,132,0.25);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s, transform 0.6s;
+      backdrop-filter: blur(6px);
+    }
+    .final-line.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== 动画 ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounceIn {
+      0%   { transform: scale(0.5); opacity: 0; }
+      70%  { transform: scale(1.1); }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+    @keyframes popIn {
+      from { transform: scale(0.7); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    /* 花瓣 */
+    .petal {
+      position: fixed;
+      top: -30px;
+      font-size: 20px;
+      animation: fall linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 音乐 -->
+  <audio id="bgm" loop>
+    <!-- 替换成你的音乐链接 -->
+    <source src="https://sf6-cdn-tos.douyinstatic.com/obj/tos-cn-ve-2774/4175373976c54caeb3260806d566d827" type="audio/mpeg"/>
+  </audio>
+  <div id="music-btn" onclick="toggleMusic()">🎶</div>
+
+  <!-- 花瓣容器 -->
+  <div id="petals"></div>
+
+  <div class="content-wrap">
+
+    <!-- 第一行 -->
+    <div class="title">祝你不止生日快乐 🎂</div>
+
+    <!-- 第二行：主图 -->
+    <!-- 替换成你想要的图片链接 -->
+    <img class="main-img"
+      src="https://bbj.sh2120.com/uploads/10001/20230402/8cf96cc2ef6b40d08f116a0f08c06773.jpg"
+      alt="生日图片"/>
+
+    <!-- 第三行 -->
+    <div class="subtitle">
+      今天是你的生日，应该有很多人祝你生日快乐吧？🌈❤️💌🌷💖🌹🍬✨
+    </div>
+
+    <!-- No 点击后依次出现的文字行 -->
+    <div class="no-line" id="no-line-1">我就不祝你生日快乐了</div>
+    <div class="no-line" id="no-line-2">我祝你不止生日快乐 🌈</div>
+    <div class="no-line" id="no-line-3">生日不止快乐 💫</div>
+    <div class="no-line" id="no-line-4">生日快乐不止 ✨</div>
+
+    <!-- 按钮 -->
+    <div class="btn-wrap" id="btn-wrap">
+      <button class="btn btn-yes" onclick="clickYes()">Yes ❤</button>
+      <button class="btn btn-no"  onclick="clickNo()">No</button>
+    </div>
+
+    <!-- 最终页面文字 -->
+    <div id="final-page">
+<!--      <div class="final-line">我们还有好多好多个生日可以一起过 🎂</div>-->
+      <div class="final-line">祝你快乐 当然不止生日 🌈</div>
+      <div class="final-line">愿世界对你温柔以待 就像我遇见你那样 🌷</div>
+<!--      <div class="final-line">虽然认识的时间不算长</div>-->
+<!--      <div class="final-line">但每一天都想多了解你一点 💫</div>-->
+<!--      <div class="final-line">你特别特别好</div>-->
+<!--&lt;!&ndash;      <div class="final-line">好到我想一直陪在你身边 ✨</div>&ndash;&gt;-->
+<!--      <div class="final-line">很开心命运让我遇到你 😊</div>-->
+      <div class="final-line">新的一岁 新的故事</div>
+      <div class="final-line">希望你每天都能嘎嘎开心 🥳</div>
+      <div class="final-line">生日快乐</div>
+    </div>
+
+  </div><!-- end content-wrap -->
+
+  <!-- 可怜弹窗（多次点no） -->
+  <div class="popup-overlay" id="popup-kelian" onclick="closeKelianAndShowBtns()">
+    <div class="popup-box" onclick="event.stopPropagation()">
+      <span class="popup-close" onclick="closeKelianAndShowBtns()">✖</span>
+      <img src="https://wechat-small-bbff.oss-cn-hangzhou.aliyuncs.com/h5-fans/yesno/emoji_kelian.jpg" alt="可怜"/>
+      <p>请告诉我Yes！</p>
+      <div class="btn-wrap" style="justify-content:center; margin-top:20px;">
+        <button class="btn btn-yes" onclick="clickYesFromPopup()">Yes ❤</button>
+        <button class="btn btn-no"  onclick="closeKelianAndShowBtns()">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Yes 弹窗 -->
+  <div class="popup-overlay" id="popup-yes">
+    <div class="popup-box">
+      <img src="https://wechat-small-bbff.oss-cn-hangzhou.aliyuncs.com/h5-fans/yesno/emoji_bixin.jpg" alt="比心"/>
+      <p>太好了！哈哈~</p>
+    </div>
+  </div>
+
+  <script>
+    /* =====================
+       状态变量
+    ===================== */
+    let noCount = 0;         // 点 No 的次数
+    const NO_LINES = 4;      // No 文字行数（含最后一次触发弹窗）
+
+    /* =====================
+       音乐控制
+    ===================== */
+    const bgm = document.getElementById('bgm');
+    const musicBtn = document.getElementById('music-btn');
+    let musicPlaying = false;
+
+    // 微信/手机需要用户交互后才能播放
+    document.addEventListener('click', function startMusic() {
+      if (!musicPlaying) {
+        bgm.play().then(() => { musicPlaying = true; })
+               .catch(() => {});
+      }
+    }, { once: true });
+
+    function toggleMusic() {
+      if (bgm.paused) {
+        bgm.play();
+        musicBtn.classList.remove('paused');
+        musicPlaying = true;
+      } else {
+        bgm.pause();
+        musicBtn.classList.add('paused');
+        musicPlaying = false;
+      }
+    }
+
+    /* =====================
+       花瓣动画
+    ===================== */
+    const emojis = ['🌸','🌹','🌷','✨','💖','🍬','❤️','🌈'];
+    function createPetals() {
+      const wrap = document.getElementById('petals');
+      for (let i = 0; i < 18; i++) {
+        const p = document.createElement('div');
+        p.className = 'petal';
+        p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.fontSize = (14 + Math.random() * 16) + 'px';
+        const dur = 4 + Math.random() * 6;
+        p.style.animationDuration = dur + 's';
+        p.style.animationDelay = (-Math.random() * dur) + 's';
+        wrap.appendChild(p);
+      }
+    }
+    createPetals();
+
+    /* =====================
+       Yes 按钮逻辑
+    ===================== */
+    // 补全所有未显示的 No 行
+    function completeNoLines() {
+      for (let i = noCount + 1; i <= NO_LINES; i++) {
+        const line = document.getElementById('no-line-' + i);
+        if (line) line.classList.add('show');
+      }
+      noCount = NO_LINES;
+    }
+    // 点击yes按钮函数
+    function clickYes() {
+      completeNoLines();
+      showYesPopup();
+    }
+    //  yes的转场
+    function showYesPopup() {
+      document.getElementById('popup-yes').classList.add('show');
+      // 短暂显示后进入最终页
+      setTimeout(() => {
+        document.getElementById('popup-yes').classList.remove('show');
+        enterFinalPage();
+      }, 1400);
+    }
+
+    function clickYesFromPopup() {
+      completeNoLines()
+      // 从可怜弹窗点 Yes
+      document.getElementById('popup-kelian').classList.remove('show');
+      showYesPopup();
+    }
+
+    /* =====================
+       No 按钮逻辑
+    ===================== */
+    function clickNo() {
+      noCount++;
+      if (noCount <= NO_LINES) {
+        const line = document.getElementById('no-line-' + noCount);
+        if (line) line.classList.add('show');
+        // 第4次点 No → 再点触发可怜弹窗
+      }
+      if (noCount >= NO_LINES) {
+        // 超过文字行数，显示可怜弹窗
+        if (noCount > NO_LINES) {
+          showKelian();
+        }
+      }
+    }
+
+    function showKelian() {
+      document.getElementById('btn-wrap').style.display = 'none';
+      document.getElementById('popup-kelian').classList.add('show');
+    }
+
+    function closeKelianAndShowBtns() {
+      // 点 No 或关闭 → 再次弹出可怜图
+      document.getElementById('popup-kelian').classList.remove('show');
+      // 短暂延迟后再等用户点 No
+      setTimeout(() => {
+        document.getElementById('popup-kelian').classList.add('show');
+      }, 600);
+    }
+
+    /* =====================
+       最终页面
+    ===================== */
+    function enterFinalPage() {
+      // 隐藏按钮和 No 文字
+      document.getElementById('btn-wrap').style.display = 'none';
+      // 背景变换
+      document.body.classList.add('final-bg');
+      // 显示最终文字区
+      const finalPage = document.getElementById('final-page');
+      finalPage.classList.add('show');
+      // 逐行淡入
+      const lines = finalPage.querySelectorAll('.final-line');
+      lines.forEach((line, i) => {
+        setTimeout(() => {
+          line.classList.add('visible');
+        }, i * 350);
+      });
+    }
+  </script>
+</body>
+</html>
